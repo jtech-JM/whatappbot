@@ -1,0 +1,4 @@
+crewai
+crewai-tools
+langchain-openai
+pydantic>=2.7.0

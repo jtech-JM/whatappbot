@@ -20,14 +20,41 @@ Create a new directory and navigate into it:
 mkdir multi-agent-crew && cd multi-agent-crew
 ```
 
-### 2. Install Dependencies
-Install the required CrewAI core, tools, and LLM orchestration packages:
+### 2. Create a Python Virtual Environment
+Create and activate a local virtual environment before installing dependencies:
+
+**Linux/macOS:**
 ```bash
-pip install crewai crewai-tools langchain-openai
+python3 -m venv .venv
+source .venv/bin/activate
 ```
 
-### 3. Configure Environment Variables
-You need API credentials from OpenAI and Serper (for web search access). Set them up in your terminal environment:
+**Windows (PowerShell):**
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+### 3. Install Dependencies
+Install the required CrewAI core, tools, LLM orchestration packages, and the Pydantic schema library:
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Configure Environment Variables
+Copy `.env.example` to `.env` and update it with your API credentials.
+
+```bash
+cp .env.example .env
+```
+
+Update the values in `.env`:
+```text
+OPENAI_API_KEY=your-openai-api-key
+SERPER_API_KEY=your-serper-api-key
+```
+
+If you prefer shell exports instead of an env file, you can also use:
 
 **On Linux/macOS:**
 ```bash
@@ -52,21 +79,64 @@ $env:SERPER_API_KEY="your-serper-api-key"
 1. Create a script named `main.py` and paste the provided workflow code into it.
 2. Run the script:
 ```bash
-python main.py
+# activate virtualenv first (see Prerequisites)
+python main.py --topic "Your Topic Here" --verbose
 ```
 
-Upon execution, the terminal will output the real-time thought loops, tool interactions, and handoffs between your agents (`verbose=True`).
+Upon execution the scaffolded workflow will run using stubbed agents; the `--verbose` flag prints intermediate payloads and evaluation traces.
 
-## 📁 Output Structure
+## 📁 Product Structure
 
-The workflow automatically creates and updates files locally. Your directory structure will update as follows:
+This repository is currently in architecture-first mode. The current workspace contains the design and documentation assets needed to define the eventual implementation.
+
+### Current Available Material
 
 ```text
-multi-agent-crew/
-├── main.py            # Workflow definition script
-├── README.md          # Documentation file
-└── final_output.md    # Generated markdown content (Created post-run)
+whatappbot/
+├── ARCHITECTURE.md                # Enterprise MAS architecture definition
+├── README.md                      # Project documentation + usage guidance
+└── assets/
+    ├── workflow-diagram.png       # Visual workflow representation
+    └── enterprise-mas-flow.png    # Enterprise MAS topology diagram
 ```
+
+### Material Not Yet Available
+
+- `main.py` — entrypoint implementation for the CrewAI workflow
+- `final_output.md` — generated markdown content output
+- `tests/` — automated unit or integration tests
+- implementation-specific configuration or orchestration scripts
+
+### Final Product Structure (Target)
+
+When the architecture is implemented, this repository should look like:
+
+```text
+whatappbot/
+├── ARCHITECTURE.md                # Final MAS architecture and design reference
+├── README.md                      # Project overview, setup, and usage
+├── main.py                        # Workflow implementation entrypoint
+├── requirements.txt               # Python dependency manifest
+├── .env.example                   # Example environment variables
+├── final_output.md                # Generated markdown publication output
+├── assets/
+│   ├── workflow-diagram.png       # Workflow diagram
+│   └── enterprise-mas-flow.png    # MAS topology diagram
+└── tests/
+    └── test_main.py              # Basic implementation tests
+```
+
+This structure provides a clean separation between architecture and implementation, and makes it clear which assets are already available versus which files are planned for the final deliverable.
+
+## 🧩 Step 1: Rigid Pydantic Data Schemas
+
+The first implementation step is to establish the inter-agent payload contracts as strongly typed models.
+
+- `schemas.py` contains the core Pydantic models that mirror the JSON schemas defined in `ARCHITECTURE.md`.
+- `ResearchBriefPayload` is the contract passed from the Researcher to the Writer.
+- `ContentEvaluationSchema` is the contract returned by the Editor/Critic to the system control layer.
+
+This ensures all future node implementations can share a consistent schema and minimizes ambiguity during development.
 
 ## 🎛️ Customization
 
