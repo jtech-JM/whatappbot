@@ -2,29 +2,7 @@
 
 An autonomous multi-agent workflow built with [CrewAI](https://crewai.com) that orchestrates a team of specialized AI agents to conduct web research and generate structured, markdown-formatted blog content.
 
-Use code with caution.
-
-┌───────────────────────┐
-│ 1. KICKOFF: {topic}   │
-└───────────┬───────────┘
-            ▼
-┌───────────────────────────────────────────┐
-│ AGENT 1: Senior Tech Researcher          │
-│ ├─ Tool: SerperDevTool (Web Search)       │
-│ └─ Task: Uncover 3 breakthroughs & trends │
-└─────────────────────┬─────────────────────┘
-                      │
-                      ▼
-┌───────────────────────────────────────────┐
-│ AGENT 2: Lead Content Strategist          │
-│ ├─ Reliance: Strictly on provided brief   │
-│ └─ Task: Draft 300-word structured post   │
-└─────────────────────┬─────────────────────┘
-                      ▼
-┌───────────────────────┐
-│ 2. FINAL OUTPUT       │
-│    (final_output.md)  │
-└───────────────────────┘
+Learn more about the technical workflow design in [`ARCHITECTURE.md`](ARCHITECTURE.md).
 
 ![Workflow Diagram](assets/workflow-diagram.png)
 
