@@ -10,6 +10,8 @@ The system is designed as a multi-node state machine with an independent Editor/
 
 ![Enterprise MAS Flow](assets/enterprise-mas-flow.png)
 
+*Figure: Runtime flow from Researcher → Writer → Editor/Critic, with rejected drafts looping back for revision.*
+
 ```text
                               ┌──────────────────────┐
                               │  Runtime Invocation  │
