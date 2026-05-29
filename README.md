@@ -41,6 +41,12 @@ Install the required CrewAI core, tools, LLM orchestration packages, and the Pyd
 pip install -r requirements.txt
 ```
 
+### 4. Install Development Dependencies
+For tests and linting, install the developer dependency set:
+```bash
+pip install -r requirements-dev.txt
+```
+
 ### 4. Configure Environment Variables
 Copy `.env.example` to `.env` and update it with your API credentials.
 
