@@ -76,57 +76,46 @@ $env:SERPER_API_KEY="your-serper-api-key"
 
 ## 💻 Usage
 
-1. Create a script named `main.py` and paste the provided workflow code into it.
-2. Run the script:
+Run the scaffolded workflow from the repository root after activating your virtual environment:
+
 ```bash
-# activate virtualenv first (see Prerequisites)
 python main.py --topic "Your Topic Here" --verbose
 ```
 
-Upon execution the scaffolded workflow will run using stubbed agents; the `--verbose` flag prints intermediate payloads and evaluation traces.
+The workflow will:
+- build a `ResearchBriefPayload` from a stubbed Researcher,
+- generate markdown content via the Writer,
+- evaluate the draft via the Editor/Critic,
+- persist the session to `data/{session_id}.json`, and
+- write `final_output.md` when the draft is approved.
 
 ## 📁 Product Structure
 
-This repository is currently in architecture-first mode. The current workspace contains the design and documentation assets needed to define the eventual implementation.
-
-### Current Available Material
+This repository currently includes both architecture and a working scaffold implementation.
 
 ```text
 whatappbot/
 ├── ARCHITECTURE.md                # Enterprise MAS architecture definition
 ├── README.md                      # Project documentation + usage guidance
+├── main.py                        # Workflow implementation entrypoint
+├── persistence.py                 # JSON session persistence layer
+├── requirements.txt               # Python dependency manifest
+├── .env.example                   # Example environment variables
+├── final_output.md                # Sample generated markdown output
+├── tests/                         # Automated unit tests
+│   ├── test_main.py
+│   └── test_persistence.py
 └── assets/
-    ├── workflow-diagram.png       # Visual workflow representation
+    ├── workflow-diagram.png       # Workflow diagram
     └── enterprise-mas-flow.png    # Enterprise MAS topology diagram
 ```
 
-### Material Not Yet Available
-
-- `main.py` — entrypoint implementation for the CrewAI workflow
-- `final_output.md` — generated markdown content output
-- `tests/` — automated unit or integration tests
-- implementation-specific configuration or orchestration scripts
-
-### Final Product Structure (Target)
-
-When the architecture is implemented, this repository should look like:
-
-```text
-whatappbot/
-├── ARCHITECTURE.md                # Final MAS architecture and design reference
-├── README.md                      # Project overview, setup, and usage
-├── main.py                        # Workflow implementation entrypoint
-├── requirements.txt               # Python dependency manifest
-├── .env.example                   # Example environment variables
-├── final_output.md                # Generated markdown publication output
-├── assets/
-│   ├── workflow-diagram.png       # Workflow diagram
-│   └── enterprise-mas-flow.png    # MAS topology diagram
-└── tests/
-    └── test_main.py              # Basic implementation tests
-```
-
-This structure provides a clean separation between architecture and implementation, and makes it clear which assets are already available versus which files are planned for the final deliverable.
+The current implementation includes:
+- a Multi-Agent workflow scaffold (`main.py`)
+- typed payload contracts in `schemas.py`
+- a persistence layer in `persistence.py`
+- automated tests for both workflow execution and session saving
+- a GitHub Actions CI workflow in `.github/workflows/ci.yml`
 
 ## 🧩 Step 1: Rigid Pydantic Data Schemas
 
