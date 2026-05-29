@@ -20,14 +20,47 @@ Create a new directory and navigate into it:
 mkdir multi-agent-crew && cd multi-agent-crew
 ```
 
-### 2. Install Dependencies
-Install the required CrewAI core, tools, and LLM orchestration packages:
+### 2. Create a Python Virtual Environment
+Create and activate a local virtual environment before installing dependencies:
+
+**Linux/macOS:**
 ```bash
-pip install crewai crewai-tools langchain-openai
+python3 -m venv .venv
+source .venv/bin/activate
 ```
 
-### 3. Configure Environment Variables
-You need API credentials from OpenAI and Serper (for web search access). Set them up in your terminal environment:
+**Windows (PowerShell):**
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+### 3. Install Dependencies
+Install the required CrewAI core, tools, LLM orchestration packages, and the Pydantic schema library:
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Install Development Dependencies
+For tests and linting, install the developer dependency set:
+```bash
+pip install -r requirements-dev.txt
+```
+
+### 4. Configure Environment Variables
+Copy `.env.example` to `.env` and update it with your API credentials.
+
+```bash
+cp .env.example .env
+```
+
+Update the values in `.env`:
+```text
+OPENAI_API_KEY=your-openai-api-key
+SERPER_API_KEY=your-serper-api-key
+```
+
+If you prefer shell exports instead of an env file, you can also use:
 
 **On Linux/macOS:**
 ```bash
@@ -49,24 +82,56 @@ $env:SERPER_API_KEY="your-serper-api-key"
 
 ## 💻 Usage
 
-1. Create a script named `main.py` and paste the provided workflow code into it.
-2. Run the script:
+Run the scaffolded workflow from the repository root after activating your virtual environment:
+
 ```bash
-python main.py
+python main.py --topic "Your Topic Here" --verbose
 ```
 
-Upon execution, the terminal will output the real-time thought loops, tool interactions, and handoffs between your agents (`verbose=True`).
+The workflow will:
+- build a `ResearchBriefPayload` from a stubbed Researcher,
+- generate markdown content via the Writer,
+- evaluate the draft via the Editor/Critic,
+- persist the session to `data/{session_id}.json`, and
+- write `final_output.md` when the draft is approved.
 
-## 📁 Output Structure
+## 📁 Product Structure
 
-The workflow automatically creates and updates files locally. Your directory structure will update as follows:
+This repository currently includes both architecture and a working scaffold implementation.
 
 ```text
-multi-agent-crew/
-├── main.py            # Workflow definition script
-├── README.md          # Documentation file
-└── final_output.md    # Generated markdown content (Created post-run)
+whatappbot/
+├── ARCHITECTURE.md                # Enterprise MAS architecture definition
+├── README.md                      # Project documentation + usage guidance
+├── main.py                        # Workflow implementation entrypoint
+├── persistence.py                 # JSON session persistence layer
+├── requirements.txt               # Python dependency manifest
+├── .env.example                   # Example environment variables
+├── final_output.md                # Sample generated markdown output
+├── tests/                         # Automated unit tests
+│   ├── test_main.py
+│   └── test_persistence.py
+└── assets/
+    ├── workflow-diagram.png       # Workflow diagram
+    └── enterprise-mas-flow.png    # Enterprise MAS topology diagram
 ```
+
+The current implementation includes:
+- a Multi-Agent workflow scaffold (`main.py`)
+- typed payload contracts in `schemas.py`
+- a persistence layer in `persistence.py`
+- automated tests for both workflow execution and session saving
+- a GitHub Actions CI workflow in `.github/workflows/ci.yml`
+
+## 🧩 Step 1: Rigid Pydantic Data Schemas
+
+The first implementation step is to establish the inter-agent payload contracts as strongly typed models.
+
+- `schemas.py` contains the core Pydantic models that mirror the JSON schemas defined in `ARCHITECTURE.md`.
+- `ResearchBriefPayload` is the contract passed from the Researcher to the Writer.
+- `ContentEvaluationSchema` is the contract returned by the Editor/Critic to the system control layer.
+
+This ensures all future node implementations can share a consistent schema and minimizes ambiguity during development.
 
 ## 🎛️ Customization
 
